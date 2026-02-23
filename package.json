@@ -1,0 +1,31 @@
+{
+  "name": "dam1m04-exercici302",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/app.js",
+  "scripts": {
+    "dev": "nodemon server/app.js",
+    "start": "node server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Valeria728/DAM1M04-Exercici302.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Valeria728/DAM1M04-Exercici302/issues"
+  },
+  "homepage": "https://github.com/Valeria728/DAM1M04-Exercici302#readme",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "hbs": "^4.2.0",
+    "mysql2": "^3.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
