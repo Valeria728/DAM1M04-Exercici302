@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
 const mysql = require('mysql2/promise');
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
@@ -15,35 +16,22 @@ hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
 let db;
 
-async function initDB() {
-  db = await mysql.createConnection({
-  host: '127.0.0.1',
-  port: 3306,
-  user: 'root',
-  password: 'valeria.18',
-  database: 'sakila'
-});
-}
-
-initDB();
+/* -------------------- RUTAS -------------------- */
 
 app.get('/', async (req, res) => {
   try {
-    // 5 películas
     const [movies] = await db.query(`
       SELECT film_id, title, release_year
       FROM film
       LIMIT 5
     `);
 
-    // 5 categorías
     const [categories] = await db.query(`
       SELECT name
       FROM category
       LIMIT 5
     `);
 
-    // añadir actores a cada película
     for (let movie of movies) {
       const [actors] = await db.query(`
         SELECT a.first_name, a.last_name
@@ -117,6 +105,30 @@ app.get('/customers', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Servidor escuchando en http://localhost:${PORT}`);
-});
+console.log("DB USER =", process.env.DB_USER);
+console.log("DB HOST =", process.env.DB_HOST);
+
+/* -------------------- ARRANQUE DEL SERVIDOR -------------------- */
+
+async function startServer() {
+  try {
+    db = await mysql.createConnection({
+      host: process.env.DB_HOST || '127.0.0.1',
+      port: process.env.DB_PORT || 3307,
+      user: process.env.DB_USER || 'super',
+      password: process.env.DB_PASS || '1234',
+      database: process.env.DB_NAME || 'sakila'
+    });
+
+    console.log('✅ Conectado a la base de datos');
+
+    app.listen(PORT, () => {
+      console.log(`✅ Servidor escuchando en http://localhost:${PORT}`);
+    });
+
+  } catch (err) {
+    console.error('❌ Error conectando a la base de datos:', err);
+  }
+}
+
+startServer();
